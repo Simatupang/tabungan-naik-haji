@@ -1,0 +1,418 @@
+program tabungan_naik_Haji;
+
+uses crt;
+
+type
+        customer = Record
+                Nama : String;
+                JK : string;
+                alamat : String;
+                Noidentitas : longint;
+        end;
+
+        Jenistab = Record
+                Khusus : Array [1..60] of integer;
+                Reguler : Array [1..120] of integer;
+        end;
+
+
+var
+
+        Rekcstmr : customer;
+        khusus : array [1..60] of integer;
+        reguler : array [1..120] of integer;
+        pilihan, i, bulan: Integer;
+        sisasetor : longint;
+        saldo : longint;
+        Setoran : longint;
+
+procedure Loading;
+
+(*Variable*)
+var
+   x, y, z      :integer;
+   count        :integer;
+
+(*Main*)
+begin
+     clrscr;
+     gotoxy(50, 6); writeln('Please wait..');
+     (*Pembatas Loading*)
+     gotoxy(50, 8);
+     write('[');
+     gotoxy(75, 8);
+     write(']');
+
+     (*Efek Loading Berjalan*)
+     count := 0;
+     repeat
+     begin
+
+          (*Perulangan untuk loading kekanan*)
+          y := 0;
+          z := 51;
+          for x := 51 to 78 do
+          begin
+               delay(10);
+               if(y > 3) then
+               begin
+                    gotoxy(z, wherey);
+                    write(' ');
+                    inc(z);
+               end;
+
+               if(x <= 74) then
+               begin
+                    gotoxy(x, wherey);
+                    write('>');
+                    inc(y);
+               end;
+          end;
+
+          (*Perulangan untuk loading ke kiri*)
+          y := 0;
+          z := 74;
+          for x := 74 downto 47 do
+          begin
+               delay(10);
+               if(y > 3) then
+               begin
+                    gotoxy(z, wherey);
+                    write(' ');
+                    dec(z);
+               end;
+
+               if(x >= 51) then
+               begin
+                    gotoxy(x, wherey);
+                    write('<');
+                    inc(y);
+               end;
+          end;
+     end;
+
+     inc(count);
+     until count = 3;
+
+     gotoxy(50,10); write('Press any key . . .');
+     readkey;
+end;
+
+procedure Setor (tunai : longint);
+
+        begin
+        textcolor(6);
+        gotoxy(50, 16); writeln('===============================================');
+        gotoxy(50, 17); writeln('Tabungan awal sebesar          : Rp',saldo);
+        gotoxy(50, 18); writeln('setoran anda                   : Rp',tunai);
+                begin
+                if (tunai < 2000000) then
+
+                        writeln('SETORAN KURANG')
+                else
+                        gotoxy(50,19); writeln('SETORAN ANDA BULAN INI TELAH TERPENUHI');
+                        textcolor(5);
+                        gotoxy(50,20); write('Tekan Enter untuk Melanjutkan..');
+                        readln;
+                        textcolor(6);
+                end;
+
+        saldo :=saldo+tunai;
+        gotoxy(50,21); writeln('Tabungan akhir anda sebesar    : Rp',saldo);
+        end;
+
+procedure sisasetor1 (setor : longint);
+
+        begin
+        sisasetor := 120000000 - saldo;
+        textcolor(0);
+        gotoxy(50, 22); writeln('Sisa yang harus anda setor adalah : Rp',sisasetor);
+        end;
+
+procedure sisasetor2 (setor : longint);
+        begin
+        sisasetor := 240000000 - saldo;
+        textcolor(0);
+        gotoxy(50, 22); writeln('Sisa yang harus anda setor adalah : Rp',sisasetor);
+        end;
+
+procedure Cetakbukti();
+
+        begin
+        gotoxy(50, 8); writeln('[ Data diri anda ] ');
+        gotoxy(50, 9); write('> NAMA LENGKAP    : ');
+        writeln(rekcstmr.nama);
+        gotoxy(50, 10); write('> JENIS KELAMIN   : ');
+        writeln(rekcstmr.JK);
+        gotoxy(50, 11); write('> ALAMAT LENGKAP  : ');
+        writeln(rekcstmr.alamat);
+        gotoxy(50, 12); write('> NOMOR Identitas : ');
+        writeln(rekcstmr.noidentitas);
+        gotoxy(50, 15); writeln(' ============================ ');
+        gotoxy(50, 16); writeln('|STATUS TABUNGAN ANDA LUNAS  |');
+        gotoxy(50, 18); writeln('|Total Tabungan Rp120000000.-|');
+        gotoxy(50, 19); writeln(' ============================ ');
+        end;
+
+procedure editdata();
+
+        begin
+        clrscr;
+        gotoxy(50, 22); writeln('>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<');
+        gotoxy(50, 23); write('Nama (Baru)            : ');readln(rekcstmr.nama);
+        repeat
+        gotoxy(50, 24); write('Jenis Kelamin (Baru)   : ');readln(rekcstmr.JK);
+        until (rekcstmr.JK='pria') or (rekcstmr.JK='PRIA') or (rekcstmr.JK='Pria') or (rekcstmr.JK='wanita') or (rekcstmr.JK='WANITA') or (rekcstmr.JK='Wanita');
+        gotoxy(50, 25); write('Alamat Lengkap (Baru)  : ');readln(rekcstmr.alamat);
+	gotoxy(50, 26); write('Nomor Identitas (Baru) : ');readln(rekcstmr.noidentitas);
+        gotoxy(50, 27); writeln('>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<');
+        gotoxy(50, 28); writeln('Press Enter...');
+        readln;
+        end;
+
+procedure showdata();
+        begin
+        gotoxy(50, 29); write('Nama Lengkap       : '); writeln(rekcstmr.nama);
+        gotoxy(50, 30); write('Jenis Kelamin      : '); writeln(rekcstmr.JK);
+        gotoxy(50, 31); write('Alamat Lengkap     : '); writeln(rekcstmr.alamat);
+        gotoxy(50, 32); write('Nomor Identitas    : '); writeln(rekcstmr.noidentitas);
+        readln;
+        end;
+Procedure inputmenu(var bulan : integer);
+
+var
+        pilihan : Char;
+        total : longint;
+        a, b, c : string;
+        begin
+        textcolor(9);
+        gotoxy(50, 12); writeln('             DAFTAR MENU             ');delay(500); {wait 0.5 second}
+        gotoxy(50, 13); writeln('*************************************');
+        textcolor(0);
+        gotoxy(50, 14); writeln('Silahkan pilih Menu yang ANDA inginkan '); delay(500); {wait 0.5 second}
+        gotoxy(50, 15); writeln('1. Lihat Keterangan Jenis Tabungan     '); delay(300); {wait 0.3 second}
+        gotoxy(50, 16); writeln('2. Tabungan Khusus (5 Tahun)           '); delay(300); {wait 0.3 second}
+        gotoxy(50, 17); writeln('3. Tabungan Reguler (10 tahun)         '); delay(300); {wait 0.3 second}
+        gotoxy(50, 18); writeln('4. Edit Data                           '); delay(300); {wait 0.3 second}
+        gotoxy(50, 19); writeln('0. Keluar                              '); delay(300); {wait 0.3 second}
+        textcolor(9);
+        gotoxy(50, 20); writeln('*************************************'); delay(500); {wait 0.5 second}
+        textcolor(0);
+        gotoxy(50, 21); write('Pilihan Anda : ');
+        readln(pilihan);
+
+        case pilihan of
+
+       '1':     begin
+                clrscr;
+                gotoxy(50,7); writeln('================================================');
+                gotoxy(50,8); writeln('================================================');
+                gotoxy(50,9); writeln('            Jenis- Jenis Tabungan                        ');delay(500);
+                gotoxy(50,11); writeln('1.Tabungan Khusus                                       ');delay(500);
+                gotoxy(50,13); writeln('> Jenis tabungan Jangka waktu 5 Tahun(120 bulan)        ');delay(300);
+                gotoxy(50,14); writeln('> Setoran Minimal Rp2.000.000,-/Bulan                   ');delay(300);
+                gotoxy(50,16); writeln('2.Tabungan Reguler                                      ');delay(500);
+                gotoxy(50,18); writeln('> Jenis tabungan Jangka waktu 10 Tahun(240 bulan)       ');delay(300);
+                gotoxy(50,19); writeln('> Setoran Minimal Rp2.000.000,-/Bulan                   ');delay(300);
+                gotoxy(50,20); writeln('===============================================');
+                gotoxy(50,21); writeln('===============================================');
+                gotoxy(50,22); writeln('Tekan Enter Untuk melanjutkan...               ');
+                readln;
+                gotoxy(50,23); writeln('Apakah anda ingin kembali ke Menu Awal? (Ya/Tidak)');
+                readln(c);
+                        if (c='ya') then
+                                begin
+                                clrscr;
+                                inputmenu(bulan);
+                                end;
+                end;
+
+
+        '2' :   begin
+                textcolor(0);
+                loading;
+                clrscr;
+                textcolor(4);
+                gotoxy(50, 8); writeln('-_-_-_>>>selamat datang pada menu tabungan Khusus<<<_-_-_-      ');
+                textcolor(0);
+                gotoxy(50,10);writeln('Tekan Enter untuk melanjutkan');
+                textcolor(4);
+                readln;
+                for i:=bulan to length(khusus) do
+
+                        begin
+                                textcolor(4);
+                                clrscr;
+                                gotoxy(50, 13); writeln('**********************************************************');
+                                gotoxy(50, 14); writeln('       (Setoran Tabungan MINIMAL Rp100.000,-/Bulan)       ');
+                                gotoxy(50, 15); write('Jumlah setoran bulan ke-',i,'      : Rp');
+                                readln(setoran);
+                                total :=setoran;
+
+                                repeat
+                                 if (total < 2000000) then
+                                  begin
+                                        textcolor(12);
+                                        gotoxy(50, 16); writeln('Setoran anda masih kurang, Silahkan setor lagi...');
+                                        gotoxy(50, 17); writeln('==========================================================');
+                                        textcolor(4);
+                                        gotoxy(50, 18); write('Jumlah setoran Bulan ke-' ,i,'      : Rp');
+                                        readln(setoran);
+                                        total := total+setoran;
+                                        clrscr;
+                                  end;
+                                until (total>=2000000);
+
+                                setor(total);
+                                sisasetor1(sisasetor);
+                                textcolor(1);
+                                if (sisasetor = 0) then
+                                        begin
+                                                clrscr;
+                                                gotoxy(50,19); writeln('TABUNGAN ANDA SUDAH LUNAS');
+                                                gotoxy(50,20); writeln('Apakah anda ingin melihat status pembayaran anda? (Ya/Tidak)');
+                                                readln(b);
+                                                if (b='ya') then
+                                                        begin
+                                                        clrscr;
+                                                         cetakbukti;
+                                                        end
+                                                else
+                                                        begin
+                                                        clrscr;
+                                                        inputmenu(bulan);
+                                                        end;
+                                        end;
+                                gotoxy(50,23); writeln(' > Apakah anda ingin menyetor kembali ?(ya/tidak)');
+                                readln(a);
+                                if(a='tidak') then
+                                        begin
+                                        bulan:=i+1;
+                                        loading;
+                                        clrscr;
+                                        inputmenu(bulan);
+                                        end;
+
+                        end;
+                        bulan :=i+1;
+                end;
+
+        '3' :   begin
+                textcolor(0);
+                loading;
+                clrscr;
+                textcolor(4);
+                gotoxy(50,8); writeln('-_-_-_>>>Selamat datang pada menu Tabungan Reguler<<<_-_-_-     ');
+                textcolor(0);
+                gotoxy(50,10); writeln('Tekan Enter untuk melanjutkan');
+                textcolor(4);
+                readln;
+                for i:=1 to length(reguler) do
+
+                        begin
+                                textcolor(4);
+                                clrscr;
+                                gotoxy(50, 13); writeln('**********************************************************');
+                                gotoxy(50, 14); writeln('       (Setoran Tabungan MINIMAL Rp100.000,-/Bulan)       ');
+                                gotoxy(50, 15); write('Jumlah setoran bulan ke-',i,'      : Rp');
+                                readln(setoran);
+                                total :=setoran;
+
+                                repeat
+                                if (total< 2000000) then
+                                 begin
+                                        textcolor(12);
+                                        gotoxy(50,16); writeln('Setoran anda masih kurang, Silahkan setor lagi...');
+                                        gotoxy(50,17); writeln('==========================================================');
+                                        textcolor(4);
+                                        gotoxy(50, 18); write('Jumlah setoran Bulan ke-' ,i,'       : Rp');
+                                        readln(setoran);
+                                        total := total+setoran;
+                                        clrscr;
+                                 end;
+                                until(total>=2000000);
+
+                                setor(total);
+                                sisasetor2(sisasetor);
+                                textcolor(1);
+                                if (sisasetor=0) then
+                                        begin
+                                                gotoxy(50,19); writeln('TABUNGAN ANDA SUDAH LUNAS');
+                                                gotoxy(50,20); writeln('Apakah anda ingin melihat status pembayaran anda? (Y/T)');
+                                                readln(b);
+                                                if (b='ya') then
+                                                        begin
+                                                        clrscr;
+                                                        cetakbukti;
+                                                        end
+                                                else
+                                                        begin
+                                                        clrscr;
+                                                        inputmenu(bulan);
+                                                        end;
+                                        end;
+                                gotoxy(50,23); writeln('Apakah anda ingin menyetor kembali ?(ya/tidak)');
+                                readln(a);
+                                if(a='tidak') then
+                                        begin
+                                        bulan := i+1;
+                                        loading;
+                                        clrscr;
+                                        inputmenu(bulan);
+                                        end;
+                        end;
+                        bulan:=i+1;
+                end;
+
+        '4' :   begin
+                editdata;
+                showdata;
+                clrscr;
+                inputmenu(bulan);
+                end;
+
+        '0' :   Begin
+                textcolor(0);
+                loading;
+                clrscr;
+                gotoxy(50, 20); writeln('       ----------------^---------------        ');
+                gotoxy(50, 21); writeln('      |______*** Terima kasih ***______|       ');
+                gotoxy(50, 22); writeln('      |***********  HORAS  ************|       ');
+                gotoxy(50, 23); writeln('       ---------------<>---------------        ');
+                readln;
+                end;
+
+        else
+	        gotoxy(50, 22); writeln('>> Menu tidak ada <<');
+		readln;
+                clrscr;
+                inputmenu(bulan);
+        end;
+end;
+
+
+{program utama}
+
+BEGIN
+
+        clrscr;
+        textcolor(0);
+        gotoxy(50, 2); writeln('=====================================');
+        gotoxy(49, 4); writeln('[APLIKASI MANAJEMEN TABUNGAN NAIK HAJI]');
+        gotoxy(50, 6); writeln('=====================================');
+        textcolor(9);
+        gotoxy(50, 7); write('Nama lengkap (Sesuai KTP)   : ');
+        readln(rekcstmr.nama);
+        repeat
+        gotoxy(50, 8); write('Jenis Kelamin (Pria/Wanita) : ');
+        readln(rekcstmr.JK);
+        until (rekcstmr.JK='pria') or (rekcstmr.JK='PRIA') or (rekcstmr.JK='Pria') or (rekcstmr.JK='wanita') or (rekcstmr.JK='WANITA') or (rekcstmr.JK='Wanita');
+        gotoxy(50, 9); write('Alamat Lengkap              : ');
+        readln(rekcstmr.alamat);
+        gotoxy(50, 10); write('Nomor Identitas             : ');
+        readln(rekcstmr.noidentitas);
+        gotoxy(49, 11); writeln('------------------<>-------------------'); delay(500);
+        bulan:=1;
+        inputmenu(bulan);
+
+END.
